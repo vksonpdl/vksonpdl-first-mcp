@@ -1,0 +1,14 @@
+# Help Eclipse/IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Build outputs
+target/
+build/
+.gradle/
+
+# Log files
+*.log
