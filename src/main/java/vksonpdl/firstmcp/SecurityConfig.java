@@ -1,3 +1,4 @@
+/*
 package vksonpdl.firstmcp;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -64,3 +65,4 @@ public class SecurityConfig {
         return jwtDecoder;
     }
 }
+*/
