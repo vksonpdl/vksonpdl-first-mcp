@@ -1,3 +1,4 @@
+/*
 package vksonpdl.firstmcp;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -24,3 +25,4 @@ public class OAuthMetadataController {
         );
     }
 }
+*/
