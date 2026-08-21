@@ -77,7 +77,7 @@ Add the following entry to your `claude_desktop_config.json`:
 
 ## 📖 MCP Tools Overview
 
-Below are the tools defined in `FlacMCP.java`:
+Below are the tools defined :
 
 | Tool Name | Parameter | Description |
 | :--- | :--- | :--- |
