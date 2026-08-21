@@ -19,7 +19,7 @@ public class FlacMCP {
        return flacFileInfoList;
     }
 
-    @McpTool(name = "get-album-list",description = "This API returns All the Available Album names from the FLAC folder")
+    @McpTool(name = "get-album-list",description = "This API returns All the Distinct Available Album names from the FLAC folder")
     public List<String> getAlbumList(){
         return flacFileInfoList.stream().map(FlacFileInfo::getAlbum).distinct().toList();
     }
