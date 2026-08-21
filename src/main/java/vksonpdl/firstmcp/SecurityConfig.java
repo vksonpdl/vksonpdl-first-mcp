@@ -1,5 +1,6 @@
 package vksonpdl.firstmcp;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,17 @@ public class SecurityConfig {
                         .requestMatchers("/.well-known/**","/health").permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
+                        // Instruct Spring Security to output the MCP required header on 401
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.addHeader(
+                                    "WWW-Authenticate",
+                                    "Bearer realm=\"mcp\", resource_metadata=\"https://vksonpdl-first-mcp.onrender.com/.well-known/oauth-protected-resource\""
+                            );
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+                        })
+                );
 
         return http.build();
     }
