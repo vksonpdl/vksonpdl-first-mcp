@@ -32,7 +32,7 @@ public class FlacTestMCP {
 
     @McpTool(name = "get-songs-by-album-like",description = "This API returns All the Available songs from the FLAC folder Based on the provided album name - it will match with like")
     public List<FlacFileInfo> getSongsBasedOnAlbumLike( @McpToolParam(description = "The Album Name") String albumName){
-        return flacFileInfoList.stream().filter(flacFileInfo -> flacFileInfo.getAlbum().contains(albumName.toUpperCase(Locale.ROOT))).toList();
+        return flacFileInfoList.stream().filter(flacFileInfo -> flacFileInfo.getAlbum().toUpperCase(Locale.ROOT).contains(albumName.toUpperCase(Locale.ROOT))).toList();
     }
 
 
