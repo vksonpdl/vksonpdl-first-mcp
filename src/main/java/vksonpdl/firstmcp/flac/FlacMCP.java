@@ -1,17 +1,16 @@
-package vksonpdl_first_mcp.flac.test;
+package vksonpdl.firstmcp.flac;
 
 import lombok.AllArgsConstructor;
 import org.springframework.ai.mcp.annotation.McpTool;
 import org.springframework.ai.mcp.annotation.McpToolParam;
 import org.springframework.stereotype.Service;
-import vksonpdl_first_mcp.flac.FlacFileInfo;
 
 import java.util.List;
 import java.util.Locale;
 
 @Service
 @AllArgsConstructor
-public class FlacTestMCP {
+public class FlacMCP {
 
     private final List<FlacFileInfo> flacFileInfoList;
 

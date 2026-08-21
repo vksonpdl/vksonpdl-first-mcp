@@ -1,4 +1,4 @@
-package vksonpdl_first_mcp.flac.test;
+package vksonpdl.firstmcp.flac;
 
 
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
-import vksonpdl_first_mcp.flac.FlacFileInfo;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
