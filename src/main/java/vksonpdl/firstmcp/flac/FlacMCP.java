@@ -1,39 +1,46 @@
 package vksonpdl.firstmcp.flac;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.mcp.annotation.McpTool;
 import org.springframework.ai.mcp.annotation.McpToolParam;
 import org.springframework.stereotype.Service;
+import vksonpdl.firstmcp.flac.model.AlbumModel;
+import vksonpdl.firstmcp.flac.model.TrackModel;
 
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class FlacMCP {
 
-    private final List<FlacFileInfo> flacFileInfoList;
+    private final FlacService flacService;
 
-    @McpTool(name = "get-all-songs",description = "This API returns All the Available songs from the FLAC folder")
-    public List<FlacFileInfo> getAvailableSongs() {
-       return flacFileInfoList;
+    @McpTool(
+            name = "get-album-list",
+            description = "This API returns All the Distinct Available Album Names along with the Corresponding Album Id"
+    )
+    public List<AlbumModel> getAlbumList() {
+        return flacService.getAlbums();
     }
 
-    @McpTool(name = "get-album-list",description = "This API returns All the Distinct Available Album names from the FLAC folder")
-    public List<String> getAlbumList(){
-        return flacFileInfoList.stream().map(FlacFileInfo::getAlbum).distinct().toList();
-    }
-
-    @McpTool(name = "get-songs-by-album",description = "This API returns All the Available songs from the FLAC folder Based on the provided album name")
-    public List<FlacFileInfo> getSongsBasedOnAlbum( @McpToolParam(description = "The Album Name") String albumName){
-        return flacFileInfoList.stream().filter(flacFileInfo -> flacFileInfo.getAlbum().equalsIgnoreCase(albumName)).toList();
-    }
-
-    @McpTool(name = "get-songs-by-album-like",description = "This API returns All the Available songs from the FLAC folder Based on the provided album name - it will match with like")
-    public List<FlacFileInfo> getSongsBasedOnAlbumLike( @McpToolParam(description = "The Album Name") String albumName){
-        return flacFileInfoList.stream().filter(flacFileInfo -> flacFileInfo.getAlbum().toUpperCase(Locale.ROOT).contains(albumName.toUpperCase(Locale.ROOT))).toList();
+    @McpTool(
+            name = "get-songs-by-album-id",
+            description = "This API returns All the Available songs Based on the Album Id"
+    )
+    public Map<String, List<TrackModel>> getSongsByAlbumId(@McpToolParam(description = "The Album Name") Integer albumId) {
+        return flacService.getSongsByAlbumId(albumId);
     }
 
 
+    @McpTool(
+            name = "get-all-songs",
+            description = "This API returns All the Available songs"
+    )
+    public Map<String, List<TrackModel>> getAllSongs() {
+       return flacService.getAllSongs();
+    }
 
 }

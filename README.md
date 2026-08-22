@@ -12,9 +12,9 @@ This application exposes tools over the MCP WebMVC protocol to allow AI assistan
 - **Audio Metadata Extraction**: Integrates `jaudiotagger` for reading FLAC audio file metadata.
 - **Exposed MCP Tools**:
   - `get-all-songs`: Returns all available FLAC file metadata objects.
-  - `get-album-list`: Returns a distinct list of album titles.
-  - `get-songs-by-album`: Performs an exact case-insensitive match on album names to list track info.
-  - `get-songs-by-album-like`: Performs a fuzzy/partial match (`contains`) search on album names.
+  - `get-albumModel-list`: Returns a distinct list of albumModel titles.
+  - `get-songs-by-albumModel`: Performs an exact case-insensitive match on albumModel names to list track info.
+  - `get-songs-by-albumModel-like`: Performs a fuzzy/partial match (`contains`) search on albumModel names.
 
 ---
 
@@ -82,9 +82,9 @@ Below are the tools defined :
 | Tool Name | Parameter | Description |
 | :--- | :--- | :--- |
 | `get-all-songs` | *None* | Returns all available songs from the FLAC repository. |
-| `get-album-list` | *None* | Returns a list of distinct album names. |
-| `get-songs-by-album` | `albumName` (String) | Fetches tracks strictly matching the provided album name. |
-| `get-songs-by-album-like` | `albumName` (String) | Fetches tracks with album names containing the input substring. |
+| `get-albumModel-list` | *None* | Returns a list of distinct albumModel names. |
+| `get-songs-by-albumModel` | `albumName` (String) | Fetches tracks strictly matching the provided albumModel name. |
+| `get-songs-by-albumModel-like` | `albumName` (String) | Fetches tracks with albumModel names containing the input substring. |
 
 ---
 
