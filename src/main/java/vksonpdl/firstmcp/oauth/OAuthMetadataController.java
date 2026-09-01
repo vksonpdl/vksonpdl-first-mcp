@@ -1,4 +1,5 @@
-package vksonpdl.firstmcp;
+/*
+package vksonpdl.firstmcp.oauth;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -38,3 +39,4 @@ public class OAuthMetadataController {
         return ResponseEntity.ok(metadata);
     }
 }
+*/
