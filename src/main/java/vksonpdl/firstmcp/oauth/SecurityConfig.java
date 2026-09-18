@@ -38,9 +38,9 @@ public class SecurityConfig {
                         McpServerOAuth2Configurer.mcpServerOAuth2(),
                         (mcpAuthorization) -> {
                             // REQUIRED: the authserver's issuer URI
-                            mcpAuthorization.authorizationServer(this.issuer);
+                            mcpAuthorization.authorizationServer(issuer);
                             // OPTIONAL: enforce the `aud` claim in the JWT token.
-                            mcpAuthorization.validateAudienceClaim(true);
+                            mcpAuthorization.validateAudienceClaim(false);
                         }
 
                 );
@@ -59,7 +59,7 @@ public class SecurityConfig {
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
         return http.build();
-    }
+    }*/
 
     @Bean
     public JwtDecoder jwtDecoder() {
@@ -74,5 +74,5 @@ public class SecurityConfig {
 
         jwtDecoder.setJwtValidator(withAudience);
         return jwtDecoder;
-    }*/
+    }
 }
