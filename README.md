@@ -25,7 +25,9 @@ This application exposes tools over the MCP WebMVC protocol to allow AI assistan
 - **Transport**: Spring WebMVC (MCP HTTP/SSE Server)
 - **Audio Processing**: JAudioTagger (`2.0.1`)
 - **Utility**: Lombok
-
+- **Security Library**: mcp-server-security (v0.1.14)
+- **Resource Server**: Spring Security OAuth 2.0 (Custom JwtDecoder for audience validation)
+- **Identity Provider (IdP)**: Auth0 (Authorization Code flow with PKCE & Client Credentials grant)
 ---
 
 ## 📋 Prerequisites
@@ -91,3 +93,6 @@ Below are the tools defined :
 ## 📄 License
 
 This project is licensed under standard open-source terms.
+
+## 📖Reference 
+For security details, please see the [Authorization Guide](AUTHORIZATION.md).

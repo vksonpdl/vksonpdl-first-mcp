@@ -4,10 +4,8 @@ import org.springaicommunity.mcp.security.server.config.McpServerOAuth2Configure
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
@@ -27,9 +25,8 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception  {
+    public SecurityFilterChain filterChain(HttpSecurity http,JwtDecoder jwtDecoder) throws Exception  {
         http
-                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/health").permitAll()
                         .anyRequest().authenticated()
@@ -37,29 +34,14 @@ public class SecurityConfig {
                 .with(
                         McpServerOAuth2Configurer.mcpServerOAuth2(),
                         (mcpAuthorization) -> {
-                            // REQUIRED: the authserver's issuer URI
+                            mcpAuthorization.jwtDecoder(jwtDecoder);
                             mcpAuthorization.authorizationServer(issuer);
-                            // OPTIONAL: enforce the `aud` claim in the JWT token.
-                            mcpAuthorization.validateAudienceClaim(false);
+                            mcpAuthorization.validateAudienceClaim(true);
                         }
 
                 );
         return http.build();
     }
-
-    /*
-
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/.well-known/**","/health").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
-        return http.build();
-    }*/
 
     @Bean
     public JwtDecoder jwtDecoder() {
@@ -67,7 +49,7 @@ public class SecurityConfig {
 
         OAuth2TokenValidator<Jwt> audienceValidator = new JwtClaimValidator<List<String>>(
                 JwtClaimNames.AUD,
-                aud -> aud != null && aud.contains(audiance)
+                aud -> aud != null && aud.contains(issuer)
         );
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
