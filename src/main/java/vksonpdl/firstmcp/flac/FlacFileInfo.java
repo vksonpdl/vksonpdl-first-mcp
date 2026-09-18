@@ -1,4 +1,4 @@
-package vksonpdl_first_mcp.flac;
+package vksonpdl.firstmcp.flac;
 
 
 import lombok.AllArgsConstructor;

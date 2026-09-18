@@ -1,0 +1,98 @@
+# vksonpdl-first-mcp
+
+A Spring Boot-based **Model Context Protocol (MCP)** Server implementation integrating **Spring AI** and audio metadata extraction capabilities (via JAudioTagger).
+
+This application exposes tools over the MCP WebMVC protocol to allow AI assistants (such as Claude Desktop, Cursor, or custom MCP clients) to query and inspect local FLAC audio files and metadata.
+
+---
+
+## 🚀 Features
+
+- **MCP Protocol Integration**: Built on `spring-ai-starter-mcp-server-webmvc` to expose structured tools over HTTP/SSE transports.
+- **Audio Metadata Extraction**: Integrates `jaudiotagger` for reading FLAC audio file metadata.
+- **Exposed MCP Tools**:
+  - `get-all-songs`: Returns all available FLAC file metadata objects.
+  - `get-albumModel-list`: Returns a distinct list of albumModel titles.
+  - `get-songs-by-albumModel`: Performs an exact case-insensitive match on albumModel names to list track info.
+  - `get-songs-by-albumModel-like`: Performs a fuzzy/partial match (`contains`) search on albumModel names.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Java**: 17
+- **Framework**: Spring Boot 4.1.0 / Spring AI 2.0.0
+- **Transport**: Spring WebMVC (MCP HTTP/SSE Server)
+- **Audio Processing**: JAudioTagger (`2.0.1`)
+- **Utility**: Lombok
+- **Security Library**: mcp-server-security (v0.1.14)
+- **Resource Server**: Spring Security OAuth 2.0 (Custom JwtDecoder for audience validation)
+- **Identity Provider (IdP)**: Auth0 (Authorization Code flow with PKCE & Client Credentials grant)
+---
+
+## 📋 Prerequisites
+
+- **Java Development Kit (JDK)**: Version 17 or higher
+- **Apache Maven**: Version 3.8+ (or use Maven Wrapper if included)
+
+---
+
+## ⚙️ Building & Running
+
+### 1. Build the Project
+Clean and compile the project using Maven:
+```bash
+mvn clean package
+```
+
+### 2. Run the Application
+Start the Spring Boot application locally:
+```bash
+mvn spring-boot:run
+```
+By default, the server runs on port `8080` and exposes MCP WebMVC endpoints (`/sse`).
+
+---
+
+## 🤖 MCP Integration Setup
+
+To connect this MCP server to **Claude Desktop** or another MCP client:
+
+Add the following entry to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "flac-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "http://localhost:8080/sse"
+      ]
+    }
+  }
+}
+```
+
+---
+
+## 📖 MCP Tools Overview
+
+Below are the tools defined :
+
+| Tool Name | Parameter | Description |
+| :--- | :--- | :--- |
+| `get-all-songs` | *None* | Returns all available songs from the FLAC repository. |
+| `get-albumModel-list` | *None* | Returns a list of distinct albumModel names. |
+| `get-songs-by-albumModel` | `albumName` (String) | Fetches tracks strictly matching the provided albumModel name. |
+| `get-songs-by-albumModel-like` | `albumName` (String) | Fetches tracks with albumModel names containing the input substring. |
+
+---
+
+## 📄 License
+
+This project is licensed under standard open-source terms.
+
+## 📖Reference 
+For security details, please see the [Authorization Guide](AUTHORIZATION.md).
