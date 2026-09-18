@@ -1,5 +1,6 @@
 package vksonpdl.firstmcp.oauth;
 
+import org.springaicommunity.mcp.security.server.config.McpServerOAuth2Configurer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,29 @@ public class SecurityConfig {
 
 
     @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http)  {
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/health").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .with(
+                        McpServerOAuth2Configurer.mcpServerOAuth2(),
+                        (mcpAuthorization) -> {
+                            // REQUIRED: the authserver's issuer URI
+                            mcpAuthorization.authorizationServer(this.issuer);
+                            // OPTIONAL: enforce the `aud` claim in the JWT token.
+                            mcpAuthorization.validateAudienceClaim(true);
+                        }
+
+                );
+        return http.build();
+    }
+
+    /*
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -50,5 +74,5 @@ public class SecurityConfig {
 
         jwtDecoder.setJwtValidator(withAudience);
         return jwtDecoder;
-    }
+    }*/
 }
