@@ -41,7 +41,7 @@ public class SecurityConfig {
                         McpServerOAuth2Configurer.mcpServerOAuth2(),
                         (mcpAuthorization) -> {
                             mcpAuthorization.authorizationServer(issuer);
-                            mcpAuthorization.validateAudienceClaim(true);
+                            mcpAuthorization.validateAudienceClaim(false);
                         }
 
                 );

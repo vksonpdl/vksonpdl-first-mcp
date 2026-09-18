@@ -17,19 +17,19 @@ This document outlines the security architecture for the Spring Boot Model Conte
 ## 3. Auth0 Configuration Components
 The Auth0 tenant is configured with specific logical components to support the MCP ecosystem:
 
-*   **Client Application (Regular Web Application):** Represents Claude Desktop. It securely holds the Client ID and Client Secret. The Token Endpoint Authentication Method is set to **Post**, and both **Authorization Code** and **Client Credentials** grant types are enabled.
+*   **Client Application (Machine to Machine):**  It securely holds the Client ID and Client Secret. The Token Endpoint Authentication Method is set to **Post**, and both **Authorization Code** and **Client Credentials** grant types are enabled.
 *   **Custom API:** Represents the Spring Boot MCP server. It is registered with an API Identifier that exactly matches the Render deployment URL (`https://vksonpdl-first-mcp.onrender.com/mcp`).
-*   **Allowed Callbacks & Origins:** Explicitly whitelists `https://claude.ai/api/mcp/auth_callback` and `https://claude.ai` to ensure secure token delivery to the Claude ecosystem.
+*   **Allowed Callbacks & Origins:** Explicitly whitelists `https://claude.ai/api/mcp/auth_callback`  to ensure secure token delivery to the Claude ecosystem.
 
 ## 4. Spring Boot Resource Server Security
-The Spring Boot application enforces security at the HTTP transport layer using the `mcp-server-security` library (version `0.1.14`) alongside standard Spring Security.
+The Spring Boot application enforces security at the HTTP transport layer using the `mcp-server-security` alongside standard Spring Security.
 
-*   **Issuer Alignment:** The `McpServerOAuth2Configurer` requires the exact Auth0 issuer URI (including the trailing slash) to satisfy Spring Security's OpenID Connect validation.
-*   **Audience Validation:** The built-in MCP strict audience check is disabled (`mcpAuthorization.validateAudienceClaim(false)`). Token validation is delegated to a custom `JwtDecoder` using an `OAuth2TokenValidator` to verify that the incoming JWT's `aud` claim matches the Render API identifier.
+*   **Issuer Alignment:** The `McpServerOAuth2Configurer` requires the exact Auth0 issuer URI  to satisfy Spring Security's OpenID Connect validation.
+*   **Audience Validation:** The built-in MCP strict audience check is disabled (`mcpAuthorization.validateAudienceClaim(flase)`) and using Custom JwtDecoder.
 *   **Endpoint Routing:**
     *   `/health` is unconditionally permitted to support Render health checks and prevent cold-start timeouts.
     *   `/mcp` requires a valid, authenticated JWT.
-    *   Standard REST API endpoints (e.g., `/api/**`) can be secured separately from the MCP tools using specific scope matchers (e.g., `.hasAuthority("SCOPE_api:access")`) or `@PreAuthorize` method annotations to prevent the LLM from accessing traditional application APIs.
+    *   Standard REST API endpoints (e.g., `/api/**`) secured separately from the MCP tools.
 
 ## 5. Tool-Level Authorization Status
 Authorization is currently implemented as a binary gate at the HTTP transport level. Once a user authenticates with Auth0 and provides a valid JWT, they have full access to discover and execute all MCP tools exposed by the Spring Boot server. Role-Based Access Control (RBAC) and tool-specific scope restrictions are not yet enabled.
